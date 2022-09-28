@@ -26,12 +26,12 @@ save_path = os.path.join(os.path.dirname(
 
 # np.set_printoptions(threshold=np.inf)
 
-class Retinaface_sophon(object):
+class IclCV(object):
     """
     description: A Retineface class that warps Sophon ops, preprocess and postprocess ops.
     """
 
-    def __init__(self, cfg, bmodel_file_path, tpu_id, score_threshold = 0.5, nms_threshold = 0.3):
+    def __init__(self, tpu_id):
         """
         :param cfg: retinaface backbone cfg file
         :param bmodel_file_path: bmodel file
@@ -43,11 +43,11 @@ class Retinaface_sophon(object):
         # Create a Context on sophon device
         tpu_count = sail.get_available_tpu_num()
         logger.debug('{} TPUs Detected, using TPU {} \n'.format(tpu_count, tpu_id))
-        self.engine = sail.Engine(bmodel_file_path, tpu_id, sail.IOMode.SYSO)
+        self.engine = sail.Engine(tpu_id)
         self.handle = self.engine.get_handle()
-        self.graph_name = self.engine.get_graph_names()[0]
-        graph_count = len(self.engine.get_graph_names())
-        logger.warning("{} graphs in {}, using {}".format(graph_count, bmodel_file_path, self.graph_name))
+        # self.graph_name = self.engine.get_graph_names()[0]
+        # graph_count = len(self.engine.get_graph_names())
+        # logger.warning("{} graphs in {}, using {}".format(graph_count, bmodel_file_path, self.graph_name))
 
         # create input tensors
         input_names     = self.engine.get_input_names(self.graph_name)
@@ -384,7 +384,7 @@ if __name__ == "__main__":
     elif opt.network == "resnet50":
         cfg = cfg_re50
 
-    retinaface = Retinaface_sophon(
+    retinaface = IclCV(
         cfg = cfg,
         bmodel_file_path=opt.bmodel,
         tpu_id=opt.tpu_id,

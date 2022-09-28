@@ -1,5 +1,47 @@
 # simple 目录介绍
 
+## 开发环境配置
+* 由于比特大陆的`se5`盒子上默认提供的是`python3.5`的开发环境，`vscode`不支持`python3.5`的调试功能，因此对其进行升级到`python3.8`的开发环境，同时导入比特大陆`npu-sdk3.0`的`python3.8`环境的开发包路径
+
+### 安装`python3.8`
+* [安装`python3.8`](https://www.python.org/ftp/python/3.8.13/Python-3.8.13.tgz)
+* 先安装[zlib](https://www.cyberithub.com/how-to-install-zlib-package-on-ubuntu-20-04-lts-focal-fossa/)
+```shell
+sudo apt update
+# sudo apt install zlib1g
+sudo apt install zlib1g-dev
+```
+* 再安装`python3.8`
+```shell
+tar xzvf Python-3.8.13.tgz
+cd Python-3.8.13 
+mkdir build && cd build
+../configure 
+make -j33
+sudo make install #默认安装在/usr/local/bin以及/usr/local/lib目录下
+```
+* 导入比特大陆`npu-sdk3.0`的`python3.8`环境的开发包路径到系统启动加载配置文件`~/.bashrc`
+```shell
+sudo vim ~/.bashrc
+export PYTHONPATH=/data/project/deploy/sophonsdk_v3.0.0_20220716/sophonsdk_v3.0.0/lib/opencv/soc/opencv-python:/data/project/deploy/sophonsdk_v3.0.0_20220716/sophonsdk_v3.0.0/lib/sail/python3/soc/py38:$PYTHONPATH
+source ~/.bashrc
+```
+* 测试`python3.8`开发环境导入比特大陆提供的开发包
+```shell
+#python3.8
+import sophon.sail as sail
+import cv2
+```
+### 安装其他的`python`开发包
+```shell
+pip3.8 install numpy -i http://pypi.douban.com/simple/ --trusted-host pypi.douban.com
+pip3.8 install Pillow -i http://pypi.douban.com/simple/ --trusted-host pypi.douban.com
+pip3.8 install shapely -i http://pypi.douban.com/simple/ --trusted-host pypi.douban.com
+pip3.8 install pyclipper -i http://pypi.douban.com/simple/ --trusted-host pypi.douban.com
+pip3.8 install loguru -i http://pypi.douban.com/simple/ --trusted-host pypi.douban.com
+pip3.8 install prettytable -i http://pypi.douban.com/simple/ --trusted-host pypi.douban.com
+```
+
 基于BMCV/OpenCV做前后处理， BMRT做为推理引擎，提供基于单个模型的推理示例。
 
 主要目录结构和模块说明：
